@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Users</h1>
+  <%= link_to 'New User', new_admin_user_path, class: 'btn btn-primary' %>
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Avatar</th>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Created At</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @users.each do |user| %>
+            <tr>
+              <td><%= avatar_image_tag(user, class: 'avatar-small') %></td>
+              <td><%= user.full_name %></td>
+              <td><%= user.email %></td>
+              <td>
+                <span class="badge <%= user.admin? ? 'bg-danger' : 'bg-secondary' %>">
+                  <%= user.role.capitalize %>
+                </span>
+              </td>
+              <td><%= user.created_at.strftime('%Y-%m-%d') %></td>
+              <td>
+                <div class="btn-group btn-group-sm">
+                  <%= link_to 'Edit', edit_admin_user_path(user), class: 'btn btn-outline-primary' %>
+                  <%= link_to 'Toggle Role', toggle_role_admin_user_path(user), method: :patch, class: 'btn btn-outline-warning' %>
+                  <%= link_to 'Delete', admin_user_path(user), method: :delete, 
+                      confirm: 'Are you sure?', class: 'btn btn-outline-danger' %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+

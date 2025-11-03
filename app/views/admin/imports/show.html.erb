@@ -1,0 +1,135 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1>Import #<%= @import.id %></h1>
+  <%= link_to 'Back to Imports', admin_imports_path, class: 'btn btn-secondary' %>
+</div>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Import Details</h5>
+      </div>
+      <div class="card-body">
+        <table class="table">
+          <tr>
+            <th>Status:</th>
+            <td>
+              <span class="badge <%= status_badge_class(@import.status) %>">
+                <%= @import.status.capitalize %>
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <th>Total Rows:</th>
+            <td><%= @import.total_rows %></td>
+          </tr>
+          <tr>
+            <th>Processed Rows:</th>
+            <td><%= @import.processed_rows %></td>
+          </tr>
+          <tr>
+            <th>Success Count:</th>
+            <td class="text-success"><%= @import.success_count %></td>
+          </tr>
+          <tr>
+            <th>Error Count:</th>
+            <td class="text-danger"><%= @import.error_count %></td>
+          </tr>
+          <tr>
+            <th>Created At:</th>
+            <td><%= @import.created_at.strftime('%Y-%m-%d %H:%M:%S') %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <% unless @import.finished? %>
+      <div class="card">
+        <div class="card-header">
+          <h5 class="mb-0">Progress</h5>
+        </div>
+        <div class="card-body">
+          <div class="progress mb-3" style="height: 30px;">
+            <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                 role="progressbar" 
+                 id="progress-bar"
+                 style="width: <%= @import.progress_percentage %>%;">
+              <%= @import.progress_percentage %>%
+            </div>
+          </div>
+          <p class="mb-0">
+            Processed: <strong id="processed-rows"><%= @import.processed_rows %></strong> / 
+            <strong id="total-rows"><%= @import.total_rows %></strong>
+          </p>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @import.error_messages.any? %>
+      <div class="card mt-4">
+        <div class="card-header bg-danger text-white">
+          <h5 class="mb-0">Errors</h5>
+        </div>
+        <div class="card-body">
+          <ul class="list-unstyled">
+            <% @import.error_messages.each do |error| %>
+              <li class="text-danger">• <%= error %></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<% unless @import.finished? %>
+  <%= javascript_tag do %>
+    document.addEventListener('DOMContentLoaded', function() {
+      const consumer = ActionCable.createConsumer();
+      const channel = consumer.subscriptions.create({
+        channel: 'ImportProgressChannel',
+        import_id: <%= @import.id %>
+      }, {
+        received(data) {
+          if (data.type === 'progress') {
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+              progressBar.style.width = data.progress + '%';
+              progressBar.textContent = data.progress + '%';
+            }
+            const processedRows = document.getElementById('processed-rows');
+            if (processedRows) {
+              processedRows.textContent = data.processed_rows;
+            }
+          } else if (data.type === 'completed') {
+            location.reload();
+          } else if (data.type === 'error') {
+            alert('Error: ' + data.message);
+          }
+        }
+      });
+
+      // Poll for updates every 2 seconds
+      setInterval(function() {
+        fetch('<%= status_admin_import_path(@import) %>')
+          .then(response => response.json())
+          .then(data => {
+            const progressBar = document.getElementById('progress-bar');
+            if (progressBar) {
+              progressBar.style.width = data.progress + '%';
+              progressBar.textContent = data.progress + '%';
+            }
+            const processedRows = document.getElementById('processed-rows');
+            if (processedRows) {
+              processedRows.textContent = data.processed_rows;
+            }
+            if (data.status === 'completed' || data.status === 'failed') {
+              location.reload();
+            }
+          })
+          .catch(error => console.error('Error fetching status:', error));
+      }, 2000);
+    });
+  <% end %>
+<% end %>
+

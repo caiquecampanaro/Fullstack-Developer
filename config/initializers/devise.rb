@@ -36,7 +36,7 @@ Devise.setup do |config|
   # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (required for MongoDB) The ORMs that are supported by default
   # are ActiveModel::Devise and ActiveModel::Mongoid.
-  config.orm = :active_record
+  # config.orm = :active_record  # Not needed in recent Devise versions
 
   # ==> Configuration for any authentication mechanism
   # Configure which keys are used when authenticating a user. The default is
@@ -200,7 +200,7 @@ Devise.setup do |config|
   # ==> Configuration for :registerable
   # When you set this to true, you can create users without confirmation
   # For direct sign up
-  config.sign_up_enabled = true
+  # config.sign_up_enabled = true  # Not available in this Devise version
 
   # ==> Configuration for :encryptable
   # Allow you to use another hashing or encryption algorithm besides bcrypt (default).

@@ -10,4 +10,3 @@ pin "@popperjs/core", to: "https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/di
 
 pin_all_from "app/javascript/controllers", under: "controllers"
 pin_all_from "app/javascript/channels", under: "channels"
-

@@ -9,7 +9,7 @@ class User < ApplicationRecord
   has_many :user_imports, dependent: :destroy
 
   # Enums
-  enum role: { user: 0, admin: 1 }
+  enum :role, { user: 0, admin: 1 }
 
   # Validations
   validates :full_name, presence: true, length: { minimum: 2, maximum: 100 }

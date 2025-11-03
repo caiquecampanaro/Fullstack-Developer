@@ -4,7 +4,7 @@ class UserImport < ApplicationRecord
   has_one_attached :spreadsheet_file
 
   # Enums
-  enum status: { pending: 0, processing: 1, completed: 2, failed: 3 }
+  enum :status, { pending: 0, processing: 1, completed: 2, failed: 3 }
 
   # Validations
   validates :spreadsheet_file, presence: true

@@ -21,7 +21,8 @@ class User < ApplicationRecord
   # Scopes
   scope :by_role, ->(role) { where(role: role) }
   scope :admins, -> { where(role: :admin) }
-  scope :regular_users, -> { where(role: :user) }
+  scope :guests, -> { where("email LIKE ? OR full_name = ?", "%@guest.temp", "Usuário Visitante") }
+  scope :regular_users, -> { where(role: :user).where.not("email LIKE ? OR full_name = ?", "%@guest.temp", "Usuário Visitante") }
 
   # Callbacks
   after_create :broadcast_user_count

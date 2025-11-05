@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     sessions: 'users/sessions'
   }
 
+  # Guest session
+  post 'guest_session', to: 'guest_sessions#create', as: 'guest_session'
+
   # User profile
   resource :profile, only: [:show, :edit, :update, :destroy], controller: 'profiles'
 

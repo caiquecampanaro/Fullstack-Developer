@@ -12,13 +12,35 @@ class ProfilesController < ApplicationController
   def update
     authorize @user
 
-    # Handle password update separately
+    # Valida senha atual se houver mudança de senha ou email
+    current_password = params[:user][:current_password]
+    password_changed = params[:user][:password].present?
+    email_changed = params[:user][:email] != @user.email
+
+    if password_changed || email_changed
+      if current_password.blank?
+        @user.errors.add(:current_password, 'is required to change password or email')
+        render :edit, status: :unprocessable_entity
+        return
+      end
+
+      unless @user.valid_password?(current_password)
+        @user.errors.add(:current_password, 'is incorrect')
+        render :edit, status: :unprocessable_entity
+        return
+      end
+    end
+
+    # Remove senha se estiver em branco
     if params[:user][:password].blank?
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
 
-    if @user.update(user_params)
+    # Remove current_password dos parâmetros (não é atributo do modelo)
+    update_params = user_params.except(:current_password)
+
+    if @user.update(update_params)
       redirect_to profile_path, notice: 'Profile updated successfully.'
     else
       render :edit, status: :unprocessable_entity

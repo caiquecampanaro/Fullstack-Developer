@@ -57,8 +57,9 @@
           </div>
 
           <div class="mb-3">
-            <%= form.label :current_password, 'Current Password (required to update)', class: 'form-label' %>
-            <%= form.password_field :current_password, class: 'form-control', autocomplete: 'current-password', required: true %>
+            <%= form.label :current_password, 'Current Password (required only to change password or email)', class: 'form-label' %>
+            <%= form.password_field :current_password, class: 'form-control', autocomplete: 'current-password' %>
+            <small class="form-text text-muted">Required only if you're changing your password or email</small>
           </div>
 
           <div class="d-flex gap-2">

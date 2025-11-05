@@ -26,6 +26,9 @@ module FullstackDeveloper
     # Set time zone
     config.time_zone = 'UTC'
     config.active_record.default_timezone = :utc
+    
+    # Configure Active Storage service (will be overridden by environment files)
+    config.active_storage.service = :local
 
     # Generators configuration
     config.generators do |g|

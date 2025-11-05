@@ -11,15 +11,16 @@
   </head>
 
   <body>
-    <%= render 'layouts/navbar' %>
+    <% auth_paths = [root_path, new_user_session_path, new_user_registration_path, new_user_password_path] %>
+    <%= render 'layouts/navbar' unless auth_paths.include?(request.path) %>
 
-    <main class="container mt-4">
+    <main class="<%= 'container mt-4' unless auth_paths.include?(request.path) %>">
       <%= render 'layouts/flash_messages' %>
 
       <%= yield %>
     </main>
 
-    <%= render 'layouts/footer' %>
+    <%= render 'layouts/footer' unless auth_paths.include?(request.path) %>
   </body>
 </html>
 

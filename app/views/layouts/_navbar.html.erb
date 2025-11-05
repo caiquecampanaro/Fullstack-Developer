@@ -34,9 +34,9 @@
       <ul class="navbar-nav">
         <% if user_signed_in? %>
           <li class="nav-item dropdown">
-            <button class="nav-link dropdown-toggle border-0 bg-transparent text-white" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" style="cursor: pointer;" onclick="(function(btn){var dropdown=btn.closest('.dropdown');if(!dropdown)return false;var menu=dropdown.querySelector('.dropdown-menu');if(!menu)return false;var isOpen=menu.classList.contains('show');document.querySelectorAll('.dropdown-menu.show').forEach(function(m){if(m!==menu){m.classList.remove('show');var t=m.closest('.dropdown')?.querySelector('[data-bs-toggle]');if(t)t.setAttribute('aria-expanded','false');}});if(isOpen){menu.classList.remove('show');btn.setAttribute('aria-expanded','false');}else{menu.classList.add('show');btn.setAttribute('aria-expanded','true');}event.stopPropagation();return false;})(this);">
+            <button class="nav-link dropdown-toggle border-0 bg-transparent text-white d-flex align-items-center" type="button" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true" style="cursor: pointer;" onclick="(function(btn){var dropdown=btn.closest('.dropdown');if(!dropdown)return false;var menu=dropdown.querySelector('.dropdown-menu');if(!menu)return false;var isOpen=menu.classList.contains('show');document.querySelectorAll('.dropdown-menu.show').forEach(function(m){if(m!==menu){m.classList.remove('show');var t=m.closest('.dropdown')?.querySelector('[data-bs-toggle]');if(t)t.setAttribute('aria-expanded','false');}});if(isOpen){menu.classList.remove('show');btn.setAttribute('aria-expanded','false');}else{menu.classList.add('show');btn.setAttribute('aria-expanded','true');}event.stopPropagation();return false;})(this);">
               <%= avatar_image_tag(current_user, class: 'avatar-small me-2') %>
-              <%= current_user.full_name %>
+              <span class="navbar-user-name"><%= current_user.full_name %></span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end user-dropdown-menu" aria-labelledby="navbarDropdown">
               <li>

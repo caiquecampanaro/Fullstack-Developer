@@ -342,8 +342,28 @@ document.addEventListener('click', function(e) {
   }
 }, true) // capture phase - executa ANTES de qualquer outro handler
 
-// Inicializa alerts após Turbo carregar
+// Previne duplicação do nome do usuário e avatar no navbar
 document.addEventListener("turbo:load", () => {
+  // Garante que há apenas um nome visível no dropdown
+  const dropdownToggle = document.querySelector('#navbarDropdown')
+  if (dropdownToggle) {
+    const namesInButton = dropdownToggle.querySelectorAll('.navbar-user-name')
+    if (namesInButton.length > 1) {
+      // Mantém apenas o primeiro e remove os outros
+      for (let i = 1; i < namesInButton.length; i++) {
+        namesInButton[i].remove()
+      }
+    }
+    
+    // Garante que há apenas um avatar
+    const avatarsInButton = dropdownToggle.querySelectorAll('.avatar-small, .avatar-placeholder')
+    if (avatarsInButton.length > 1) {
+      for (let i = 1; i < avatarsInButton.length; i++) {
+        avatarsInButton[i].remove()
+      }
+    }
+  }
+  
   setTimeout(initializeAlerts, 100)
 })
 

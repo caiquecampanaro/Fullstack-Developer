@@ -3,23 +3,27 @@
 # The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
 
 # Create admin user
-admin = User.find_or_create_by(email: 'admin@example.com') do |user|
-  user.full_name = 'Admin User'
-  user.password = 'password123'
-  user.password_confirmation = 'password123'
-  user.role = :admin
-end
+admin = User.find_or_initialize_by(email: 'admin@example.com')
+admin.assign_attributes(
+  full_name: 'Admin User',
+  password: 'password123',
+  password_confirmation: 'password123',
+  role: :admin
+)
+admin.save!
 
-puts "Admin user created: #{admin.email}"
+puts "Admin user #{admin.persisted? ? 'updated' : 'created'}: #{admin.email}"
 
 # Create some sample users
 10.times do |i|
-  User.find_or_create_by(email: "user#{i + 1}@example.com") do |user|
-    user.full_name = Faker::Name.name
-    user.password = 'password123'
-    user.password_confirmation = 'password123'
-    user.role = :user
-  end
+  user = User.find_or_initialize_by(email: "user#{i + 1}@example.com")
+  user.assign_attributes(
+    full_name: Faker::Name.name,
+    password: 'password123',
+    password_confirmation: 'password123',
+    role: :user
+  )
+  user.save!
 end
 
 puts "Sample users created"

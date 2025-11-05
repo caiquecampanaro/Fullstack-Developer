@@ -47,8 +47,7 @@ group :development, :test do
   gem 'database_cleaner-active_record', '~> 2.2'
   gem 'simplecov', require: false
   gem 'capybara', '~> 3.40'
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
+  gem 'selenium-webdriver', '>= 4.11'
 end
 
 group :development do

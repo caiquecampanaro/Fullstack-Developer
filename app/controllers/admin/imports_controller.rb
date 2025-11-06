@@ -16,7 +16,7 @@ class Admin::ImportsController < Admin::BaseController
     authorize @import
 
     if @import.save
-      UserImportJob.perform_async(@import.id)
+      UserImportJob.perform_later(@import.id)
       redirect_to admin_import_path(@import), notice: 'Import started. Progress will be shown below.'
     else
       render :new, status: :unprocessable_entity

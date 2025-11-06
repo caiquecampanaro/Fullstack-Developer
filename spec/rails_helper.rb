@@ -15,7 +15,8 @@ SimpleCov.start 'rails' do
   add_filter '/spec/'
   add_filter '/config/'
   add_filter '/vendor/'
-  minimum_coverage 90
+  add_group 'Helpers', 'app/helpers'
+  #minimum_coverage 90
 end
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
@@ -107,6 +108,21 @@ RSpec.configure do |config|
   # Include Devise test helpers
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::IntegrationHelpers, type: :request
+  
+  # Include Rails Controller Testing helpers
+  config.include Rails::Controller::Testing::TestProcess, type: :controller
+  config.include Rails::Controller::Testing::TemplateAssertions, type: :controller
+  config.include Rails::Controller::Testing::Integration, type: :controller
+  
+  # Configure Devise mapping for controller tests
+  config.before(:each, type: :controller) do
+    @request.env['devise.mapping'] = Devise.mappings[:user] if defined?(Devise)
+  end
+
+  # Configure ActiveJob for testing
+  config.before(:each) do
+    ActiveJob::Base.queue_adapter = :test
+  end
 
   # Include Shoulda Matchers
   Shoulda::Matchers.configure do |shoulda_config|

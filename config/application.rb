@@ -27,6 +27,9 @@ module FullstackDeveloper
     config.time_zone = 'UTC'
     config.active_record.default_timezone = :utc
     
+    # Set default locale to English
+    config.i18n.default_locale = :en
+    
     # Configure Active Storage service (will be overridden by environment files)
     config.active_storage.service = :local
 

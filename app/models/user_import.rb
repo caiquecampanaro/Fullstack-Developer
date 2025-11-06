@@ -16,7 +16,7 @@ class UserImport < ApplicationRecord
 
   # Instance methods
   def progress_percentage
-    return 0 if total_rows.zero?
+    return 0 if total_rows.nil? || total_rows.zero?
 
     ((processed_rows.to_f / total_rows) * 100).round(2)
   end
@@ -32,8 +32,10 @@ class UserImport < ApplicationRecord
 
     allowed_types = %w[
       application/vnd.ms-excel
+      application/excel
       application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
       text/csv
+      application/csv
     ]
 
     content_type = spreadsheet_file.blob.content_type

@@ -15,6 +15,10 @@ class UserImportPolicy < ApplicationPolicy
     create?
   end
 
+  def status?
+    show?
+  end
+
   class Scope < Scope
     def resolve
       return scope.none unless user&.admin?

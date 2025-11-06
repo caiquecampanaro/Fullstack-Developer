@@ -12,7 +12,6 @@ class ProfilesController < ApplicationController
   def update
     authorize @user
 
-    # Valida senha atual se houver mudança de senha ou email
     current_password = params[:user][:current_password]
     password_changed = params[:user][:password].present?
     email_changed = params[:user][:email] != @user.email
@@ -31,13 +30,11 @@ class ProfilesController < ApplicationController
       end
     end
 
-    # Remove senha se estiver em branco
     if params[:user][:password].blank?
       params[:user].delete(:password)
       params[:user].delete(:password_confirmation)
     end
 
-    # Remove current_password dos parâmetros (não é atributo do modelo)
     update_params = user_params.except(:current_password)
 
     if @user.update(update_params)

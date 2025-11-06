@@ -9,7 +9,6 @@ module ApplicationHelper
     elsif user.avatar_url.present?
       image_tag(user.avatar_url, options.merge(onerror: "this.onerror=null; this.classList.add('avatar-placeholder'); this.style.backgroundColor='#e9ecef';"))
     else
-      # Retorna uma div estilizada como placeholder quando não há imagem
       content_tag(:div, '', class: "#{options[:class]} avatar-placeholder", style: 'background-color: #e9ecef; display: inline-block;')
     end
   end

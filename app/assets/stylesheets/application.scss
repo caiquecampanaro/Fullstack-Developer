@@ -778,3 +778,102 @@ body {
   }
 }
 
+// File input customizado com layout melhorado
+.file-input-wrapper {
+  position: relative;
+  display: block;
+  
+  input[type="file"].form-control {
+    // Ocultar TUDO do texto padrão do navegador
+    color: transparent !important;
+    text-indent: -9999px !important;
+    font-size: 0 !important;
+    
+    // Ocultar botão nativo completamente
+    &::-webkit-file-upload-button {
+      display: none !important;
+      visibility: hidden !important;
+      width: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      border: none !important;
+      font-size: 0 !important;
+      opacity: 0 !important;
+    }
+    
+    // Para Firefox
+    &::-moz-file-upload-button {
+      display: none !important;
+      visibility: hidden !important;
+      width: 0 !important;
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+    
+    // Ajustar padding para o botão e texto customizados aparecerem dentro
+    padding-left: 110px !important;
+    padding-right: 10px !important;
+    height: 38px;
+  }
+  
+  .file-input-custom-button {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #6c757d;
+    color: white;
+    padding: 0.375rem 0.875rem;
+    border-radius: 0.375rem 0 0 0.375rem;
+    border: 1px solid #6c757d;
+    border-right: none;
+    font-size: 0.875rem;
+    font-weight: 500;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 38px;
+    min-width: 100px;
+    transition: all 0.2s ease;
+    pointer-events: auto;
+    
+    &:hover {
+      background: #5a6268;
+      border-color: #5a6268;
+    }
+    
+    &:active {
+      background: #545b62;
+      border-color: #545b62;
+    }
+  }
+  
+  .file-input-english-text {
+    position: absolute;
+    left: 110px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 0.875rem;
+    pointer-events: none;
+    z-index: 5;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 120px);
+  }
+}
+
+// Animação para pontinhos do "Processing..."
+.processing-text {
+  vertical-align: middle;
+}
+
+.processing-dots {
+  display: inline-block;
+  width: 1.5em;
+  text-align: left;
+}
+

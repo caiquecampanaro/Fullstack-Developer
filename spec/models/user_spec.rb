@@ -5,7 +5,13 @@ RSpec.describe User, type: :model do
     it { is_expected.to validate_presence_of(:full_name) }
     it { is_expected.to validate_length_of(:full_name).is_at_least(2).is_at_most(100) }
     it { is_expected.to validate_presence_of(:email) }
-    it { is_expected.to validate_uniqueness_of(:email).case_insensitive }
+    
+    it 'validates uniqueness of email case-insensitively' do
+      create(:user, email: 'test@example.com')
+      user = build(:user, email: 'TEST@example.com')
+      expect(user).not_to be_valid
+      expect(user.errors[:email]).to include('has already been taken')
+    end
   end
 
   describe 'associations' do
@@ -39,8 +45,12 @@ RSpec.describe User, type: :model do
       let(:user) { create(:user) }
 
       before do
+        # Create a simple test image in memory (1x1 PNG)
+        png_data = "\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x00\x01\x00\x00\x00\x01\x08\x06\x00\x00\x00\x1f\x15\xc4\x89\x00\x00\x00\nIDATx\x9cc\x00\x01\x00\x00\x05\x00\x01\r\n-\xdb\x00\x00\x00\x00IEND\xaeB`\x82"
+        file = StringIO.new(png_data)
+        
         user.avatar_image.attach(
-          io: File.open(Rails.root.join('spec', 'fixtures', 'test.png')),
+          io: file,
           filename: 'test.png',
           content_type: 'image/png'
         )

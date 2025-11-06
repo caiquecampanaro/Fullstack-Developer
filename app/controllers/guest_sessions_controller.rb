@@ -2,7 +2,6 @@ class GuestSessionsController < ApplicationController
   skip_before_action :authenticate_user!
 
   def create
-    # Cria um usuário visitante temporário
     guest_email = "guest_#{SecureRandom.hex(8)}@guest.temp"
     guest_user = User.create!(
       email: guest_email,

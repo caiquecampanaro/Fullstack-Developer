@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     root 'dashboards#show'
     get 'dashboard', to: 'dashboards#show'
     
-    resources :users, except: [:show] do
+    resources :users do
       member do
         patch :toggle_role
       end
@@ -37,5 +37,11 @@ Rails.application.routes.draw do
 
   # ActionCable
   mount ActionCable.server => '/cable'
+
+  # Sidekiq UI (protected by admin authentication)
+  require 'sidekiq/web'
+  authenticate :user, ->(u) { u.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
 

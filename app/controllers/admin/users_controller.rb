@@ -1,9 +1,14 @@
 class Admin::UsersController < Admin::BaseController
-  before_action :set_user, only: [:edit, :update, :destroy, :toggle_role]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :toggle_role]
 
   def index
     @users = policy_scope(User).includes(:avatar_image_attachment).order(created_at: :desc)
     authorize User
+  end
+
+  def show
+    authorize @user
+    redirect_to admin_users_path
   end
 
   def new
@@ -48,15 +53,16 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def toggle_role
-    authorize @user, :toggle_role?
-
     if @user == current_user
       redirect_to admin_users_path, alert: 'You cannot change your own role.'
-    else
+      return
+    end
+
+    authorize @user, :toggle_role?
+
       new_role = @user.admin? ? :user : :admin
       @user.update(role: new_role)
       redirect_to admin_users_path, notice: "User role changed to #{new_role}."
-    end
   end
 
   private

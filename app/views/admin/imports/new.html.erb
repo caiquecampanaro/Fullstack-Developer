@@ -19,7 +19,11 @@
 
           <div class="mb-3">
             <%= form.label :spreadsheet_file, 'Spreadsheet File', class: 'form-label' %>
-            <%= form.file_field :spreadsheet_file, accept: '.xlsx,.xls,.csv', class: 'form-control', required: true %>
+            <div class="file-input-wrapper" style="position: relative;">
+              <%= form.file_field :spreadsheet_file, accept: '.xlsx,.xls,.csv', class: 'form-control', required: true, id: 'spreadsheet_file_input' %>
+              <button type="button" class="file-input-custom-button" onclick="document.getElementById('spreadsheet_file_input').click()">Choose File</button>
+              <span class="file-input-english-text" id="file-name-display">No file chosen</span>
+            </div>
             <small class="form-text text-muted">
               Accepted formats: Excel (.xlsx, .xls) or CSV (.csv).<br>
               Required columns: full_name, email (optional: role, avatar_url)
@@ -35,4 +39,33 @@
     </div>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  (function() {
+    const fileInput = document.getElementById('spreadsheet_file_input');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    
+    if (fileInput && fileNameDisplay) {
+      // Função para atualizar o nome do arquivo
+      function updateFileName() {
+        if (fileInput.files && fileInput.files.length > 0) {
+          const fileName = fileInput.files[0].name;
+          fileNameDisplay.textContent = fileName;
+          fileNameDisplay.style.color = '#212529';
+          fileNameDisplay.title = fileName;
+        } else {
+          fileNameDisplay.textContent = 'No file chosen';
+          fileNameDisplay.style.color = '#6c757d';
+          fileNameDisplay.title = '';
+        }
+      }
+      
+      // Adicionar listener para mudanças no input
+      fileInput.addEventListener('change', updateFileName);
+      
+      // Atualizar inicialmente
+      updateFileName();
+    }
+  })();
+<% end %>
 

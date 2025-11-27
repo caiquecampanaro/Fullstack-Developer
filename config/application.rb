@@ -33,6 +33,10 @@ module FullstackDeveloper
     # Configure Active Storage service (will be overridden by environment files)
     config.active_storage.service = :local
 
+    # Importmap serves JavaScript files directly from app/javascript, not through Sprockets
+    # This ensures importmap can serve files without Sprockets interference
+    config.importmap.sweep_cache = true
+
     # Generators configuration
     config.generators do |g|
       g.test_framework :rspec,

@@ -30,6 +30,10 @@ Rails.application.configure do
   # Do not fallback to assets pipeline if a precompiled asset is missing.
   config.assets.compile = false
 
+  # Importmap serves JavaScript files directly from app/javascript, not through Sprockets
+  # This ensures importmap can serve files without Sprockets interference
+  config.importmap.sweep_cache = true
+
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = 'http://assets.example.com'
 

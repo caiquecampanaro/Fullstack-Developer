@@ -11,3 +11,12 @@ Rails.application.config.assets.version = '1.0'
 # folder are already added.
 # Rails.application.config.assets.precompile += %w( admin.js admin.css )
 
+# This project uses importmap for JavaScript, not Sprockets
+# Exclude JavaScript files from Sprockets to avoid conflicts with importmap
+# Sprockets should only handle CSS files
+Rails.application.config.assets.precompile.delete('application.js') if Rails.application.config.assets.precompile.include?('application.js')
+
+# Prevent Sprockets from trying to compile importmap JavaScript files
+# Importmap serves files directly from app/javascript, not through Sprockets
+Rails.application.config.assets.paths.delete(Rails.root.join('app/javascript').to_s) if Rails.application.config.assets.paths.include?(Rails.root.join('app/javascript').to_s)
+

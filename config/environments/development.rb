@@ -33,6 +33,10 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
+  # Enable serving static files for importmap to work correctly
+  # Importmap serves JavaScript files directly from app/javascript
+  config.public_file_server.enabled = true
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.variant_processor = :mini_magick
   config.active_storage.service = :local
@@ -59,6 +63,17 @@ Rails.application.configure do
 
   # Suppress logger output for asset requests.
   config.assets.quiet = true
+
+  # Enable asset compilation in development (for CSS only, JavaScript uses importmap)
+  config.assets.compile = true
+
+  # Importmap serves JavaScript files directly from app/javascript, not through Sprockets
+  # This ensures importmap can serve files without Sprockets interference
+  config.importmap.sweep_cache = true
+  
+  # Disable Sprockets precompiled asset check for importmap files
+  # This prevents Sprockets from trying to compile importmap JavaScript files
+  config.assets.check_precompiled_asset = false
 
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
